@@ -2,7 +2,7 @@ import requests
 from cookie import HOST, XHS_COOKIE
 import unittest
 import time
- 
+
 class TestModule(unittest.TestCase):
     # 添加账户接口
     def test_add_account(self):
@@ -13,7 +13,7 @@ class TestModule(unittest.TestCase):
         response = requests.post(f'{HOST}/xhs/add_account', json=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['code'], 0)
-    
+
     # 账户列表接口
     def test_account_list(self):
         # 添加账户
@@ -83,19 +83,21 @@ class TestModule(unittest.TestCase):
 
         # 获取评论
         param = {
-            "id" : '6684ca89000000001c025acb'
+            "id": '6684ca89000000001c025acb',
+            "xsec_token": '',
         }
         response = requests.get(f'{HOST}/xhs/comments', params=param)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['code'], 0)
         self.assertGreater(len(response.json()['data']['comments']), 0)
-        
+
         time.sleep(1)
         # 测试翻页 page_size = 20
         offset = 55
         limit = 5
         param = {
-            "id" : '6684ca89000000001c025acb',
+            "id": '6684ca89000000001c025acb',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -109,7 +111,8 @@ class TestModule(unittest.TestCase):
         offset = 60
         limit = 5
         param = {
-            "id" : '6684ca89000000001c025acb',
+            "id": '6684ca89000000001c025acb',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -123,7 +126,8 @@ class TestModule(unittest.TestCase):
         offset = 55
         limit = 10
         param = {
-            "id" : '6684ca89000000001c025acb',   # 快手官方视频
+            "id": '6684ca89000000001c025acb',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -132,7 +136,7 @@ class TestModule(unittest.TestCase):
         self.assertEqual(response.json()['code'], 0)
         self.assertGreater(len(response.json()['data']['comments']), 0)
         self.assertSequenceEqual([comment['id'] for comment in response.json()['data']['comments']], first_page + second_page)
- 
+
     # 获取评论回复接口
     def test_reply(self):
         # 添加账户
@@ -146,8 +150,9 @@ class TestModule(unittest.TestCase):
 
         # 获取评论回复
         param = {
-            "id" : '6684ca89000000001c025acb',
-            "comment_id": '668742f900000000170031ae'
+            "id": '6684ca89000000001c025acb',
+            "comment_id": '668742f900000000170031ae',
+            "xsec_token": ''
         }
         response = requests.get(f'{HOST}/xhs/replys', params=param)
         self.assertEqual(response.status_code, 200)
@@ -159,8 +164,9 @@ class TestModule(unittest.TestCase):
         offset = 5
         limit = 5
         param = {
-            "id" : '6684ca89000000001c025acb',
+            "id": '6684ca89000000001c025acb',
             "comment_id": '668742f900000000170031ae',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -174,8 +180,9 @@ class TestModule(unittest.TestCase):
         offset = 10
         limit = 5
         param = {
-            "id" : '6684ca89000000001c025acb',
+            "id": '6684ca89000000001c025acb',
             "comment_id": '668742f900000000170031ae',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -189,8 +196,9 @@ class TestModule(unittest.TestCase):
         offset = 5
         limit = 10
         param = {
-            "id" : '6684ca89000000001c025acb',   # 抖音官方视频
+            "id": '6684ca89000000001c025acb',
             "comment_id": '668742f900000000170031ae',
+            "xsec_token": '',
             "offset": offset,
             "limit": limit
         }
@@ -213,7 +221,7 @@ class TestModule(unittest.TestCase):
 
         # 搜索
         param = {
-            "keyword" : "白丝"
+            "keyword": "白丝"
         }
         response = requests.get(f'{HOST}/xhs/search', params=param)
         self.assertEqual(response.status_code, 200)
@@ -233,7 +241,7 @@ class TestModule(unittest.TestCase):
 
         # 获取用户信息
         param = {
-            "id" : "5a4b2f90e8ac2b388a327acb"
+            "id": "5a4b2f90e8ac2b388a327acb"
         }
         response = requests.get(f'{HOST}/xhs/user', params=param)
         self.assertEqual(response.status_code, 200)
@@ -245,7 +253,7 @@ class TestModule(unittest.TestCase):
         offset = 25
         limit = 5
         param = {
-            "id" : '5a4b2f90e8ac2b388a327acb',
+            "id": '5a4b2f90e8ac2b388a327acb',
             "offset": offset,
             "limit": limit
         }
@@ -259,7 +267,7 @@ class TestModule(unittest.TestCase):
         offset = 30
         limit = 5
         param = {
-            "id" : '5a4b2f90e8ac2b388a327acb',
+            "id": '5a4b2f90e8ac2b388a327acb',
             "offset": offset,
             "limit": limit
         }
@@ -273,7 +281,7 @@ class TestModule(unittest.TestCase):
         offset = 25
         limit = 10
         param = {
-            "id" : '5a4b2f90e8ac2b388a327acb',
+            "id": '5a4b2f90e8ac2b388a327acb',
             "offset": offset,
             "limit": limit
         }
