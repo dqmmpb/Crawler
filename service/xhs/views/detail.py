@@ -17,9 +17,11 @@ async def detail(id: str, xsec_token: str):
             continue
         account_id = account.get('id', '')
         res, succ = await request_detail(id, xsec_token, account.get('cookie', ''))
-        if res == {} or not succ:
+        if not succ:
             logger.error(f'get note detail failed, account: {account_id}, id: {id}')
             continue
+        if res == {} and succ:
+            logger.warning(f'get note detail failed, account: {account_id}, id: {id}, res: {res}')
         logger.info(f'get note detail success, account: {account_id}, id: {id}, res: {res}')
         return reply(ErrorCode.OK, '成功' , res)
     logger.warning(f'get note detail failed. id: {id}')
