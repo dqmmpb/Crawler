@@ -1,6 +1,6 @@
 from .common import common_request
 
-async def request_comments(id: str, cookie: str, offset: int, limit: int) -> tuple[dict, bool]:
+async def request_comments(id: str, xsec_token: str, cookie: str, offset: int, limit: int) -> tuple[dict, bool]:
     """
     请求小红书获取评论信息
     """
@@ -14,7 +14,8 @@ async def request_comments(id: str, cookie: str, offset: int, limit: int) -> tup
             "note_id": id,
             "cursor": cursor,
             "top_comment_id": '',
-            "image_formats": ["jpg", "webp", "avif"]
+            "image_formats": ["jpg", "webp", "avif"],
+            "xsec_token": xsec_token,
         }
         resp, succ = await common_request('/api/sns/web/v2/comment/page', data, headers, True, False)
         if not succ:

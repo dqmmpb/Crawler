@@ -5,7 +5,7 @@ from lib.logger import logger
 from ..logic import request_replys
 import random
 
-async def replys(id: str, comment_id: str, offset: int = 0, limit: int = 10):
+async def replys(id: str, comment_id: str, xsec_token: str, offset: int = 0, limit: int = 10):
     """
     获取笔记评论回复
     """
@@ -15,7 +15,7 @@ async def replys(id: str, comment_id: str, offset: int = 0, limit: int = 10):
         if account.get('expired', 0) == 1:
             continue
         account_id = account.get('id', '')
-        res, succ = await request_replys(id, comment_id, account.get('cookie', ''), offset, limit)
+        res, succ = await request_replys(id, comment_id, xsec_token, account.get('cookie', ''), offset, limit)
         if res == {} or not succ:
             logger.error(f'get reply failed, account: {account_id}, id: {id}, comment_id: {comment_id}, offset: {offset}, limit: {limit}')
             continue

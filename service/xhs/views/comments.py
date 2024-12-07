@@ -5,7 +5,7 @@ from lib.logger import logger
 from ..logic import request_comments
 import random
 
-async def comments(id: str, offset: int = 0, limit: int = 20):
+async def comments(id: str, xsec_token: str, offset: int = 0, limit: int = 20):
     """
     获取笔记评论
     """
@@ -15,7 +15,7 @@ async def comments(id: str, offset: int = 0, limit: int = 20):
         if account.get('expired', 0) == 1:
             continue
         account_id = account.get('id', '')
-        res, succ = await request_comments(id, account.get('cookie', ''), offset, limit)
+        res, succ = await request_comments(id, xsec_token, account.get('cookie', ''), offset, limit)
         if res == {} or not succ:
             logger.error(f'get comments failed, account: {account_id} id: {id}, offset: {offset}, limit: {limit}')
             continue
