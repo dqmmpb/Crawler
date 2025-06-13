@@ -2,7 +2,7 @@ import requests
 from cookie import HOST, DY_COOKIE
 import unittest
 import time
- 
+
 class TestModule(unittest.TestCase):
     # 添加账户接口
     def test_add_account(self):
@@ -13,7 +13,7 @@ class TestModule(unittest.TestCase):
         response = requests.post(f'{HOST}/douyin/add_account', json=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['code'], 0)
-    
+
     # 账户列表接口
     def test_account_list(self):
         # 添加账户
@@ -63,7 +63,7 @@ class TestModule(unittest.TestCase):
 
         # 获取详情
         param = {
-            "id" : '6911683747733671175'# 抖音官方视频
+            "id": '6911683747733671175'    # 抖音官方视频
         }
         response = requests.get(f'{HOST}/douyin/detail', params=param)
         self.assertEqual(response.status_code, 200)
@@ -83,19 +83,19 @@ class TestModule(unittest.TestCase):
 
         # 获取评论
         param = {
-            "id" : '6911683747733671175'# 抖音官方视频
+            "id": '6911683747733671175',    # 抖音官方视频
         }
         response = requests.get(f'{HOST}/douyin/comments', params=param)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['code'], 0)
         self.assertGreater(len(response.json()['data']['comments']), 0)
-        
+
         time.sleep(1)
         # 测试翻页 page_size = 20
         offset = 55
         limit = 5
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',    # 抖音官方视频
             "offset": offset,
             "limit": limit
         }
@@ -109,7 +109,7 @@ class TestModule(unittest.TestCase):
         offset = 60
         limit = 5
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',    # 抖音官方视频
             "offset": offset,
             "limit": limit
         }
@@ -123,7 +123,7 @@ class TestModule(unittest.TestCase):
         offset = 55
         limit = 10
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',    # 抖音官方视频
             "offset": offset,
             "limit": limit
         }
@@ -132,7 +132,7 @@ class TestModule(unittest.TestCase):
         self.assertEqual(response.json()['code'], 0)
         self.assertGreater(len(response.json()['data']['comments']), 0)
         self.assertSequenceEqual([comment['cid'] for comment in response.json()['data']['comments']], first_page + second_page)
- 
+
     # 获取评论回复接口
     def test_reply(self):
         # 添加账户
@@ -146,7 +146,7 @@ class TestModule(unittest.TestCase):
 
         # 获取评论回复
         param = {
-            "id" : '6911683747733671175', # 抖音官方视频
+            "id": '6911683747733671175',     # 抖音官方视频
             "comment_id": '6912088044888031236'
         }
         response = requests.get(f'{HOST}/douyin/replys', params=param)
@@ -159,7 +159,7 @@ class TestModule(unittest.TestCase):
         offset = 5
         limit = 5
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',    # 抖音官方视频
             "comment_id": '6912088044888031236',
             "offset": offset,
             "limit": limit
@@ -174,7 +174,7 @@ class TestModule(unittest.TestCase):
         offset = 10
         limit = 5
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',   # 抖音官方视频
             "comment_id": '6912088044888031236',
             "offset": offset,
             "limit": limit
@@ -189,7 +189,7 @@ class TestModule(unittest.TestCase):
         offset = 5
         limit = 10
         param = {
-            "id" : '6911683747733671175',   # 抖音官方视频
+            "id": '6911683747733671175',   # 抖音官方视频
             "comment_id": '6912088044888031236',
             "offset": offset,
             "limit": limit
@@ -233,7 +233,7 @@ class TestModule(unittest.TestCase):
 
         # 获取用户信息
         param = {
-            "id" : "MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10"    # 抖音官方账号
+            "id": "MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10"    # 抖音官方账号
         }
         response = requests.get(f'{HOST}/douyin/user', params=param)
         self.assertEqual(response.status_code, 200)
@@ -245,7 +245,7 @@ class TestModule(unittest.TestCase):
         offset = 25
         limit = 5
         param = {
-            "id" : 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
+            "id": 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
             "offset": offset,
             "limit": limit
         }
@@ -259,7 +259,7 @@ class TestModule(unittest.TestCase):
         offset = 30
         limit = 5
         param = {
-            "id" : 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
+            "id": 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
             "offset": offset,
             "limit": limit
         }
@@ -273,7 +273,7 @@ class TestModule(unittest.TestCase):
         offset = 25
         limit = 10
         param = {
-            "id" : 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
+            "id": 'MS4wLjABAAAA3y0gs9xhygmvZhVEHWt5Y4aLHi9KooKSNxVQ2pslu10',   # 抖音官方账号
             "offset": offset,
             "limit": limit
         }

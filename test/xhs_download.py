@@ -7,7 +7,8 @@ import time
 
 import requests
 
-from xhs_utils import COMMON_HEADERS, ensure_dir, get_file_size, extract_path, read_jsonlines
+from utils import ensure_dir, get_file_size, extract_path, read_jsonlines
+from xhs_utils import COMMON_HEADERS
 
 
 async def request_download(media_url: str, media_path: str, headers=None):
@@ -122,7 +123,7 @@ async def main():
     ###########################################
 
     input_files = [
-        f"../result/search__荨麻疹__1749720904.211481__unique__note__1749721158.15949.jsonl",
+        f"../result/xhs/search__荨麻疹__1749720904.211481__unique__note__1749721158.15949.jsonl",
     ]
 
     for input_file in input_files:

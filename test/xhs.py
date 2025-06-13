@@ -63,7 +63,8 @@ class TestModule(unittest.TestCase):
 
         # 获取详情
         param = {
-            "id" : '6684ca89000000001c025acb'
+            "id": '6684ca89000000001c025acb',
+            "xsec_token": ''
         }
         response = requests.get(f'{HOST}/xhs/detail', params=param)
         self.assertEqual(response.status_code, 200)

@@ -5,10 +5,11 @@ from lib.logger import logger
 from ..logic import request_search
 import random
 
-async def search(keyword: str, sort: str = "general", offset: int = 0, limit: int = 20, note_type: int = 0, search_id: str = None):
+async def search(keyword: str, offset: int = 0, limit: int = 10, sort: str = "general", note_type: int = 0, search_id: str = None):
     """
     获取笔记搜索
-    "sort": general：默认, popularity_descending：最热, time_descending：最新
+    "sort": general: 综合(默认), popularity_descending: 最热, time_descending: 最新
+    "note_type": 0: 全部, 1: 视频, 2: 图文
     """
     _accounts = await accounts.load()
     random.shuffle(_accounts)
@@ -16,8 +17,11 @@ async def search(keyword: str, sort: str = "general", offset: int = 0, limit: in
         if account.get('expired', 0) == 1:
             continue
         account_id = account.get('id', '')
-        res = await request_search(keyword, account.get('cookie', ''), sort, offset, limit, note_type, search_id)
+        res, succ, search_id = await request_search(keyword, account.get('cookie', ''), offset, limit, sort, note_type, search_id)
+        if res == {} or not succ:
+            logger.error(f'search failed, account: {account_id}, keyword: {keyword}, offset: {offset}, limit: {limit}, res: {res}')
+            continue
         logger.info(f'search success, account: {account_id}, keyword: {keyword}, sort: {sort}, offset: {offset}, limit: {limit}, res: {res}')
-        return reply(ErrorCode.OK, '成功' , res)
+        return reply(ErrorCode.OK, '成功' , res, search_id)
     logger.warning(f'search failed. keyword: {keyword}, sort: {sort}, offset: {offset}, limit: {limit}')
     return reply(ErrorCode.NO_ACCOUNT, '请先添加账号')

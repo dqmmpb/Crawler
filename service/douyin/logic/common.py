@@ -1,3 +1,4 @@
+import copy
 from lib.logger import logger
 import execjs
 from lib import requests
@@ -59,7 +60,30 @@ COMMON_HEADERS ={
 
 DOUYIN_SIGN = execjs.compile(open('lib/js/douyin.js', encoding='utf-8').read())
 
+# 生成随机的webid
+def get_web_id():
+    """
+    生成随机的webid
+    Returns:
+
+    """
+
+    def e(t):
+        if t is not None:
+            return str(t ^ (int(16 * random.random()) >> (t // 4)))
+        else:
+            return ''.join(
+                [str(int(1e7)), '-', str(int(1e3)), '-', str(int(4e3)), '-', str(int(8e3)), '-', str(int(1e11))]
+            )
+
+    web_id = ''.join(
+        e(int(x)) if x in '018' else x for x in e(None)
+    )
+    return web_id.replace('-', '')[:19]
+
+# 无法获得webid，请使用get_web_id()
 async def get_webid(headers: dict):
+    headers = copy.deepcopy(headers)
     url = 'https://www.douyin.com/?recommend=1'
     logger.info(
         f'url: {url}, request {url}, headers={headers}')
@@ -77,7 +101,7 @@ async def get_webid(headers: dict):
     return None
 
 def cookies_to_dict(cookie_string) -> dict:
-    cookies = cookie_string.split('; ')
+    cookies = re.split(r';\s*', cookie_string)
     cookie_dict = {}
     for cookie in cookies:
         if cookie == '' or cookie == 'douyin.com':
@@ -98,7 +122,8 @@ async def deal_params(params: dict, headers: dict) -> dict:
     params['device_memory'] = cookie_dict.get('device_web_memory_size', 8)
     params['verifyFp'] = cookie_dict.get('s_v_web_id', None)
     params['fp'] = cookie_dict.get('s_v_web_id', None)
-    params['webid'] = await get_webid(headers)
+    # params['webid'] = await get_webid(headers)
+    params['webid'] = get_web_id()
     return params
 
 def get_ms_token(randomlength=120):
@@ -134,6 +159,7 @@ async def common_request(uri: str, params: dict, headers: dict) -> tuple[dict, b
 
     logger.info(
         f'url: {url}, request {url}, params={params}, headers={headers}')
+    print(query)
     response = await requests.get(url, params=params, headers=headers)
     logger.info(
         f'url: {url}, params: {params}, response, code: {response.status_code}, body: {response.text}')
