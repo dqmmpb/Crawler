@@ -8,7 +8,7 @@ import time
 import requests
 
 from utils import ensure_dir, get_file_size, extract_path, read_jsonlines
-from xhs_utils import COMMON_HEADERS
+from douyin_utils import COMMON_HEADERS
 
 
 async def request_download(media_url: str, media_path: str, headers=None):
@@ -33,7 +33,7 @@ async def request_download(media_url: str, media_path: str, headers=None):
         return None
 
 
-async def download(media_url: str, media_path: str, no_media_set: set, note, media: dict):
+async def download(media_url: str, media_path: str, no_media_set: set, aweme, media: dict):
     # 确保路径存在
     ensure_dir(media_path)
 
@@ -41,7 +41,7 @@ async def download(media_url: str, media_path: str, no_media_set: set, note, med
         print(f"Exist {media_url} to {media_path}")
         size = get_file_size(media_path)
         if size == 0:
-            no_media_set.add(note['id'])
+            no_media_set.add(aweme['aweme_id'])
             try:
                 os.remove(media_path)
                 print("Deleted the incomplete file: {}".format(media_path))
@@ -55,7 +55,7 @@ async def download(media_url: str, media_path: str, no_media_set: set, note, med
             print("Saved {} to {}".format(media_url, media_path))
             size = get_file_size(media_path)
             if size == 0:
-                no_media_set.add(note['id'])
+                no_media_set.add(aweme['aweme_id'])
                 try:
                     os.remove(media_path)
                     print("Deleted the incomplete file: {}".format(media_path))
@@ -73,57 +73,49 @@ async def download(media_url: str, media_path: str, no_media_set: set, note, med
         time.sleep(random.randint(1, 5))
 
 
-async def download_photo(output_dir: str, no_media_set: set, note, media: dict):
-    print(f"[{note['type']}]: {media['urlDefault']}")
-
-    media_url = media['urlDefault']
-
+async def download_photo(output_dir: str, no_media_set: set, aweme, media: dict):
+    print(f"[{aweme['media_type']}]: {media['url_list'][len(media['url_list']) - 1]}")
+    media_url = media['url_list'][len(media['url_list']) - 1]
     path = extract_path(media_url)
     media_path = os.path.join(output_dir, path[1:]) if path.startswith('/') else os.path.join(output_dir, path)
     media_path = media_path.rsplit("!")[0]
     media_path = os.path.join(os.path.dirname(media_path), os.path.basename(media_path) + ('.jpg' if '.' not in os.path.basename(media_path) else ''))
     print(f"media_path: {media_path}")
 
-    await download(media_url, media_path, no_media_set, note, media)
+    await download(media_url, media_path, no_media_set, aweme, media)
 
 
-async def download_video(output_dir: str, no_media_set: set, note, media: dict):
-    for stream_type in media['media']['stream']:
-        streams = media['media']['stream'][f"{stream_type}"]
-        if streams is not None:
-            for key, stream in enumerate(streams):
-                print(f"[{note['type']}]: {stream['masterUrl']}")
-                media_url = stream['masterUrl']
-                path = extract_path(media_url)
-                media_path = os.path.join(output_dir, path[1:]) if path.startswith('/') else os.path.join(output_dir, path)
-                media_path = media_path.rsplit("!")[0]
-                media_path = os.path.join(os.path.dirname(media_path), os.path.basename(media_path) + ('.mp4' if '.' not in os.path.basename(media_path) else ''))
-                await download(media_url, media_path, no_media_set, note, stream)
+async def download_video(output_dir: str, no_media_set: set, aweme, media: dict):
+    print(f"[{aweme['media_type']}]: {media['url_list'][len(media['url_list']) - 1]}")
+    media_url = media['url_list'][len(media['url_list']) - 1]
+    path = extract_path(media_url)
+    media_path = os.path.join(output_dir, path[1:]) if path.startswith('/') else os.path.join(output_dir, path)
+    media_path = media_path.rsplit("!")[0] + aweme['aweme_id'] + "/" + media['uri']
+    media_path = os.path.join(os.path.dirname(media_path), os.path.basename(media_path) + ('.mp4' if '.' not in os.path.basename(media_path) else ''))
+    await download(media_url, media_path, no_media_set, aweme, media)
 
 
 async def download_media(output_dir: str, no_media_set: set, results: list[dict]):
     for i, result in enumerate(results):
         print(f"Index {i}/{len(results)}: {json.dumps(result, ensure_ascii=False)}")
-        note = result['note']
-        if note is not None:
-            if note['type'] == 'normal':
-                print(f"[{note['type']}]: {note['imageList']}")
-                for media in note['imageList']:
+        aweme = result
+        if aweme is not None:
+            if aweme['media_type'] == 2:
+                print(f"[{aweme['media_type']}]: {aweme['images']}")
+                for media in aweme['images']:
                     if media is not None:
-                        await download_photo(output_dir, no_media_set, note, media)
-            if note['type'] == 'video':
-                print(f"[{note['type']}]: {note['imageList']}")
-                for media in note['imageList']:
-                    if media is not None:
-                        await download_photo(output_dir, no_media_set, note, media)
-                await download_video(output_dir, no_media_set, note, note['video'])
+                        await download_photo(output_dir, no_media_set, aweme, media)
+            if aweme['media_type'] == 4:
+                print(f"[{aweme['media_type']}]: {aweme['video']['download_addr']['url_list'][len(aweme['video']['download_addr']['url_list']) - 1]}")
+                await download_photo(output_dir, no_media_set, aweme, aweme['video']['cover'])
+                await download_video(output_dir, no_media_set, aweme, aweme['video']['download_addr'])
 
 
 async def main():
     ###########################################
 
     input_files = [
-        f"../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__1749721158.15949__unique.jsonl",
+        f"../result/douyin/search__佳荔__1749820493.9978392__unique__detail__1750044416.172564.jsonl",
     ]
 
     for input_file in input_files:
