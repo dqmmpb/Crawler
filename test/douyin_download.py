@@ -90,7 +90,7 @@ async def download_video(output_dir: str, no_media_set: set, aweme, media: dict)
     media_url = media['url_list'][len(media['url_list']) - 1]
     path = extract_path(media_url)
     media_path = os.path.join(output_dir, path[1:]) if path.startswith('/') else os.path.join(output_dir, path)
-    media_path = media_path.rsplit("!")[0] + aweme['aweme_id'] + "/" + media['uri']
+    media_path = media_path.rsplit("!")[0] + media['uri']
     media_path = os.path.join(os.path.dirname(media_path), os.path.basename(media_path) + ('.mp4' if '.' not in os.path.basename(media_path) else ''))
     await download(media_url, media_path, no_media_set, aweme, media)
 
@@ -98,7 +98,7 @@ async def download_video(output_dir: str, no_media_set: set, aweme, media: dict)
 async def download_media(output_dir: str, no_media_set: set, results: list[dict]):
     for i, result in enumerate(results):
         print(f"Index {i}/{len(results)}: {json.dumps(result, ensure_ascii=False)}")
-        aweme = result
+        aweme = result['aweme_info'] if "aweme_info" in result else result
         if aweme is not None:
             if aweme['media_type'] == 2:
                 print(f"[{aweme['media_type']}]: {aweme['images']}")
@@ -106,16 +106,22 @@ async def download_media(output_dir: str, no_media_set: set, results: list[dict]
                     if media is not None:
                         await download_photo(output_dir, no_media_set, aweme, media)
             if aweme['media_type'] == 4:
-                print(f"[{aweme['media_type']}]: {aweme['video']['download_addr']['url_list'][len(aweme['video']['download_addr']['url_list']) - 1]}")
+                print(f"[{aweme['media_type']}]: {aweme['video']['cover']}")
                 await download_photo(output_dir, no_media_set, aweme, aweme['video']['cover'])
-                await download_video(output_dir, no_media_set, aweme, aweme['video']['download_addr'])
+
+                print(f"[{aweme['media_type']}]: {aweme['video']['play_addr']['url_list'][len(aweme['video']['play_addr']['url_list']) - 1]}")
+                await download_video(output_dir, no_media_set, aweme, aweme['video']['play_addr'])
+
+                # # download_addr 存在cdn_url_expired过期时间
+                # print(f"[{aweme['media_type']}]: {aweme['video']['download_addr']['url_list'][len(aweme['video']['download_addr']['url_list']) - 1]}")
+                # await download_video(output_dir, no_media_set, aweme, aweme['video']['download_addr'])
 
 
 async def main():
     ###########################################
 
     input_files = [
-        f"../result/douyin/search__佳荔__1749820493.9978392__unique__detail__1750044416.172564.jsonl",
+        f"../result/douyin/search__佳荔__1750151923.8933089__unique.jsonl",
     ]
 
     for input_file in input_files:

@@ -319,20 +319,20 @@ class TestModule(unittest.TestCase):
         return unique_results
 
     def test_search_unique(self):
-        filepath = f'../result/douyin/search__佳荔__1749820493.9978392.jsonl'
+        filepath = f'../result/douyin/search__佳荔__1750151923.8933089.jsonl'
         filepaths = [filepath]
         unique_filepath = filepath.replace('.jsonl', '__unique.jsonl')
         self.test_search_unique_merge(filepaths, unique_filepath)
 
     def test_search_merge(self):
         filepaths = [
-            f'../result/douyin/search__佳荔__1749820493.9978392__unique.jsonl',
+            f'../result/douyin/search__佳荔__1750151923.8933089__unique.jsonl',
         ]
         unique_filepath = f'../result/douyin/search__佳荔__{time.time()}__unique__merged.jsonl'
         self.test_search_unique_merge(filepaths, unique_filepath)
 
     def test_search_file_results(self):
-        filepath = f'../result/douyin/search__佳荔__1749820493.9978392__unique.jsonl'
+        filepath = f'../result/douyin/search__佳荔__1750151923.8933089__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"filepath: {filepath}, result: {len(results)}")
 
@@ -401,7 +401,7 @@ class TestModule(unittest.TestCase):
             return results
 
     def test_detail_job(self):
-        filepath = f'../result/douyin/search__佳荔__1749820493.9978392__unique.jsonl'
+        filepath = f'../result/douyin/search__佳荔__1750151923.8933089__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"文件路径: {filepath}, result: {len(results)}")
 
@@ -435,20 +435,20 @@ class TestModule(unittest.TestCase):
         return unique_results
 
     def test_detail_unique(self):
-        filepath = f'../result/douyin/search__佳荔__1749820493.9978392__unique__detail__1749820728.2634182.jsonl'
+        filepath = f'../result/douyin/search__佳荔__1750151923.8933089__unique__detail__1749820728.2634182.jsonl'
         filepaths = [filepath]
         unique_filepath = filepath.replace('.jsonl', '__unique.jsonl')
         self.test_detail_unique_merge(filepaths, unique_filepath)
 
     def test_detail_merge(self):
         filepaths = [
-            f'../result/douyin/search__佳荔__1749820493.9978392__unique__detail__1749820728.2634182.jsonl',
+            f'../result/douyin/search__佳荔__1750151923.8933089__unique__detail__1749820728.2634182.jsonl',
         ]
-        unique_filepath = f'../result/douyin/search__佳荔__1749820493.9978392__unique__detail__unique__merged.jsonl'
+        unique_filepath = f'../result/douyin/search__佳荔__1750151923.8933089__unique__detail__unique__merged.jsonl'
         self.test_detail_unique_merge(filepaths, unique_filepath)
 
     def test_detail_file_results(self):
-        filepath = f'../result/douyin/search__佳荔__1749820493.9978392__unique__detail__1749820728.2634182__unique.jsonl'
+        filepath = f'../result/douyin/search__佳荔__1750151923.8933089__unique__detail__1749820728.2634182__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"filepath: {filepath}, result: {len(results)}")
 
