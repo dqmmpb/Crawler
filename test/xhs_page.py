@@ -300,8 +300,7 @@ class TestModule(unittest.TestCase):
             return results
 
     def test_search_job(self):
-        # keywords = ['荨麻疹', '湿疹', '痤疮', '银屑病', '毛囊炎', '灰指甲', '水痘']
-        keywords = ['荨麻疹']
+        keywords = ['佳荔']
 
         print("关键词: ", keywords, ' '.join(keywords))
 
@@ -350,20 +349,20 @@ class TestModule(unittest.TestCase):
         return unique_results
 
     def test_search_unique(self):
-        filepath = f'../result/xhs/search__荨麻疹__1749720904.211481.jsonl'
+        filepath = f'../result/xhs/search__佳荔__1750217686.738292.jsonl'
         filepaths = [filepath]
         unique_filepath = filepath.replace('.jsonl', '__unique.jsonl')
         self.test_search_unique_merge(filepaths, unique_filepath)
 
     def test_search_merge(self):
         filepaths = [
-            f'../result/xhs/search__荨麻疹__1749720904.211481__unique.jsonl',
+            f'../result/xhs/search__佳荔__1750217686.738292__unique.jsonl',
         ]
-        unique_filepath = f'../result/xhs/search__荨麻疹__{time.time()}__unique__merged.jsonl'
+        unique_filepath = f'../result/xhs/search__佳荔__{time.time()}__unique__merged.jsonl'
         self.test_search_unique_merge(filepaths, unique_filepath)
 
     def test_search_file_results(self):
-        filepath = f'../result/xhs/search__荨麻疹__1749720904.211481__unique.jsonl'
+        filepath = f'../result/xhs/search__佳荔__1750217686.738292__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"filepath: {filepath}, result: {len(results)}")
 
@@ -429,7 +428,7 @@ class TestModule(unittest.TestCase):
             return results
 
     def test_detail_job(self):
-        filepath = f'../result/xhs/search__荨麻疹__1749720904.211481__unique.jsonl'
+        filepath = f'../result/xhs/search__佳荔__1750217686.738292__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"文件路径: {filepath}, result: {len(results)}")
 
@@ -463,20 +462,20 @@ class TestModule(unittest.TestCase):
         return unique_results
 
     def test_detail_unique(self):
-        filepath = f'../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__1749721158.15949.jsonl'
+        filepath = f'../result/xhs/search__佳荔__1750217686.738292__unique__detail__1750217866.054349.jsonl'
         filepaths = [filepath]
         unique_filepath = filepath.replace('.jsonl', '__unique.jsonl')
         self.test_detail_unique_merge(filepaths, unique_filepath)
 
     def test_detail_merge(self):
         filepaths = [
-            f'../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__1749721158.15949__unique.jsonl',
+            f'../result/xhs/search__佳荔__1750217686.738292__unique__detail__1750217866.054349__unique.jsonl',
         ]
-        unique_filepath = f'../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__unique__merged.jsonl'
+        unique_filepath = f'../result/xhs/search__佳荔__1750217686.738292__unique__detail__unique__merged.jsonl'
         self.test_detail_unique_merge(filepaths, unique_filepath)
 
     def test_detail_file_results(self):
-        filepath = f'../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__1749721158.15949__unique.jsonl'
+        filepath = f'../result/xhs/search__佳荔__1750217686.738292__unique__detail__1750217866.054349__unique.jsonl'
         results = read_jsonlines(filepath)
         print(f"filepath: {filepath}, result: {len(results)}")
 

@@ -123,7 +123,7 @@ async def main():
     ###########################################
 
     input_files = [
-        f"../result/xhs/search__荨麻疹__1749720904.211481__unique__detail__1749721158.15949__unique.jsonl",
+        f"../result/xhs/search__佳荔__1750217686.738292__unique__detail__1750217866.054349__unique.jsonl",
     ]
 
     for input_file in input_files:
