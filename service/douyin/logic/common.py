@@ -1,4 +1,6 @@
 import copy
+import json
+
 from lib.logger import logger
 import execjs
 from lib import requests
@@ -159,7 +161,9 @@ async def common_request(uri: str, params: dict, headers: dict) -> tuple[dict, b
 
     logger.info(
         f'url: {url}, request {url}, params={params}, headers={headers}')
-    print(query)
+
+    print(f'url: {url}, request {url}, params={json.dumps(params)}, headers={json.dumps(headers)}')
+
     response = await requests.get(url, params=params, headers=headers)
     logger.info(
         f'url: {url}, params: {params}, response, code: {response.status_code}, body: {response.text}')
