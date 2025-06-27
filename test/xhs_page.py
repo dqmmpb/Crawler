@@ -390,7 +390,7 @@ class TestModule(unittest.TestCase):
                             "id": note["id"],
                             "xsec_token": note["xsec_token"]
                         }
-                        detail_url = f'https://www.xiaohongshu.com/explore/{note["id"]}?type=normal&xsec_token={note["xsec_token"].replace("=","")}=&xsec_source=pc_share&exSource='
+                        detail_url = f'https://www.xiaohongshu.com/explore/{note["id"]}?type=normal&xsec_token={note["xsec_token"]}&xsec_source=pc_share&exSource='
                         print(f"第{index}/{len(notes)}条, 详情开始: {detail_url}")
                         response = requests.get(f'{HOST}/xhs/detail', params=param)
                         print(response.json())
